@@ -31,8 +31,8 @@ Adds the given permissions to the given player/uuid in the given or all worlds. 
 ### void pex\_remove\_user\_permission(player/uuid, permission, [world]):
 Removes the given permissions from the given player/uuid in the given or all worlds. The world argument will be ignored when it is null or empty. Throws IllegalArgumentException when player/uuid or permission is empty. Throws NullPointerException when player/uuid or permission is null.
 
-### array pex\_get\_user\_groups(player/uuid, [world]):
-Returns an array containing all groups the player/uuid is in, specifically for the given or all worlds (so when getting groups from some world, the non-world specific groups are not included). The world argument will be ignored when it is null or empty. Returns an array containing only the default group if a default group has been set and no other groups were found. Throws IllegalArgumentException when player/uuid is empty. Throws NullPointerException when player/uuid is null.
+### array pex\_get\_user\_groups(player/uuid, [world, [specificOnly]]):
+Returns an array containing all groups the player/uuid has in the given world. There are three types of groups: default (from group configs), global (personal user config) and world-specific (personal user config). When 'world' is non-empty, the world-specific groups are included. When 'world' is empty, the global groups are included. 'world' defaults to ''. When 'specificOnly' is false, the global groups are included. When 'specificOnly' is false and no groups have been included so far, default groups are included. 'specificOnly' defaults to false. Throws IllegalArgumentException when player/uuid is empty. Throws NullPointerException when player/uuid is null.
 
 ### void pex\_set\_user\_groups(player/uuid, groupArray, [world]):
 Sets the groups for the given player/uuid in the given or all worlds. The world argument will be ignored when it is null or empty. Throws IllegalArgumentException when player/uuid or a group in the groupArray is empty. Throws NullPointerException when player/uuid or a group in the groupArray is null.

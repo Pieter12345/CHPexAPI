@@ -95,6 +95,14 @@ public class CHPexFunctions {
 		return PermissionsEx.getPermissionManager().getGroup(convertNonNullNonEmptyStringArg(group, "group", t));
 	}
 	
+	static boolean convertBooleanArg(Construct cBoolean, String argName, Target t) throws CRECastException {
+		if(!(cBoolean instanceof CBoolean)) {
+			throw new CRECastException(
+					"Expecting " + argName + " to be a boolean. Found: " + cBoolean.typeof() + ".", t);
+		}
+		return ((CBoolean) cBoolean).getBoolean();
+	}
+	
 	static String convertStringArg(Construct cString, String argName, Target t) throws CRECastException {
 		if(cString instanceof CNull) {
 			return null;

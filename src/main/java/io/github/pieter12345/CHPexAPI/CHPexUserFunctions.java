@@ -22,7 +22,6 @@ import com.laytonsmith.core.exceptions.CRE.CRENullPointerException;
 import com.laytonsmith.core.exceptions.CRE.CREThrowable;
 
 import io.github.pieter12345.CHPexAPI.LifeCycle.PexFunction;
-import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
@@ -287,30 +286,41 @@ public class CHPexUserFunctions extends CHPexFunctions {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionUser permUser = getPexUser(args[0], t);
 			String world = (args.length > 1 ? convertStringArg(args[1], "world", t) : null);
-			List<PermissionGroup> permGroups = (world == null || world.isEmpty()
-					? permUser.getOwnParents() : permUser.getOwnParents(world));
+			boolean specificOnly = (args.length > 2 ? convertBooleanArg(args[2], "specificOnly", t) : false);
+			
+			List<String> permGroups;
+			if(specificOnly) {
+				permGroups = (world == null || world.isEmpty()
+						? permUser.getOwnParentIdentifiers() : permUser.getOwnParentIdentifiers(world));
+			} else {
+				permGroups = (world == null || world.isEmpty()
+						? permUser.getParentIdentifiers() : permUser.getParentIdentifiers(world));
+			}
+			
 			CArray userGroups = new CArray(t);
-			for(PermissionGroup permGroup : permGroups) {
-				userGroups.push(new CString(permGroup.getName(), t), t);
+			for(String permGroup : permGroups) {
+				userGroups.push(new CString(permGroup, t), t);
 			}
 			return userGroups;
 		}
 		
 		@Override
 		public String docs() {
-			return "array {player/uuid, [world]} Returns an array containing all groups the player/uuid is in,"
-					+ " specifically for the given or all worlds"
-					+ " (so when getting groups from some world, the non-world specific groups are not included)."
-					+ " The world argument will be ignored when it is null or empty."
-					+ " Returns an array containing only the default group if a default group has been set and no"
-					+ " other groups were found."
+			return "array {player/uuid, [world, [specificOnly]]} Returns an array containing all groups the"
+					+ " player/uuid has in the given world. There are three types of groups: default"
+					+ " (from group configs), global (personal user config) and world-specific (personal user config)."
+					+ " When 'world' is non-empty, the world-specific groups are included."
+					+ " When 'world' is empty, the global groups are included. 'world' defaults to ''."
+					+ " When 'specificOnly' is false, the global groups are included."
+					+ " When 'specificOnly' is false and no groups have been included so far,"
+					+ " default groups are included. 'specificOnly' defaults to false."
 					+ " Throws IllegalArgumentException when player/uuid is empty."
 					+ " Throws NullPointerException when player/uuid is null.";
 		}
 		
 		@Override
 		public Integer[] numArgs() {
-			return new Integer[] {1, 2};
+			return new Integer[] {1, 2, 3};
 		}
 	}
 	
