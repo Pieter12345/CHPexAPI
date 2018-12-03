@@ -12,7 +12,6 @@ import com.laytonsmith.core.constructs.CArray;
 import com.laytonsmith.core.constructs.CNull;
 import com.laytonsmith.core.constructs.CString;
 import com.laytonsmith.core.constructs.CVoid;
-import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.CommandHelperEnvironment;
 import com.laytonsmith.core.environments.Environment;
@@ -21,6 +20,7 @@ import com.laytonsmith.core.exceptions.CRE.CRECastException;
 import com.laytonsmith.core.exceptions.CRE.CREIllegalArgumentException;
 import com.laytonsmith.core.exceptions.CRE.CRENullPointerException;
 import com.laytonsmith.core.exceptions.CRE.CREThrowable;
+import com.laytonsmith.core.natives.interfaces.Mixed;
 
 import io.github.pieter12345.CHPexAPI.LifeCycle.PexFunction;
 import ru.tehkode.permissions.PermissionGroup;
@@ -37,7 +37,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_get_groups extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			CArray ret = new CArray(t);
 			for(PermissionGroup permGroup : PermissionsEx.getPermissionManager().getGroupList()) {
@@ -67,7 +67,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_get_group_options extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			CArray ret = CArray.GetAssociativeArray(t);
@@ -100,7 +100,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_set_group_option extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			// An empty key will overwrite the options array with an empty string, so disallow empty keys.
@@ -136,7 +136,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_get_group_permissions extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			CArray ret = CArray.GetAssociativeArray(t);
@@ -170,7 +170,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_set_group_permissions extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			
@@ -185,7 +185,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 				+ "(group, permissionArray) to be a non-associative array.", t);
 			}
 			List<String> permsList = new ArrayList<>();
-			for(Construct perm : permsArray.asList()) {
+			for(Mixed perm : permsArray.asList()) {
 				permsList.add(convertNonNullNonEmptyStringArg(perm, "permission", t));
 			}
 			
@@ -220,7 +220,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_add_group_permission extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			String perm = convertNonNullNonEmptyStringArg(args[1], "permission", t);
@@ -252,7 +252,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_remove_group_permission extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			String perm = convertNonNullNonEmptyStringArg(args[1], "permission", t);
@@ -284,7 +284,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_get_group_users extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			String world = (args.length > 1 ? convertStringArg(args[1], "world", t) : null);
@@ -317,7 +317,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_get_group_parents extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			String world = (args.length > 1 ? convertStringArg(args[1], "world", t) : null);
@@ -350,12 +350,12 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_set_group_parents extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			
 			// Get groups.
-			Construct groups = args[1];
+			Mixed groups = args[1];
 			if(groups instanceof CNull) {
 				throw new CRENullPointerException("Parent array can not be null.", t);
 			}
@@ -365,7 +365,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 			}
 			CArray groupsArray = (CArray) groups;
 			List<String> parentNames = new ArrayList<String>((int) groupsArray.size());
-			for(Construct group : groupsArray.asList()) {
+			for(Mixed group : groupsArray.asList()) {
 				parentNames.add(convertNonNullNonEmptyStringArg(group, "group", t));
 			}
 			
@@ -400,7 +400,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_add_group_parent extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			String group = convertNonNullNonEmptyStringArg(args[1], "parent", t);
@@ -444,7 +444,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_remove_group_parent extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			String group = convertNonNullNonEmptyStringArg(args[1], "parent", t);
@@ -488,7 +488,7 @@ public class CHPexGroupFunctions extends CHPexFunctions {
 	public static class pex_get_group_children extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionGroup permGroup = getPexGroup(args[0], t);
 			String world = (args.length > 1 ? convertStringArg(args[1], "world", t) : null);

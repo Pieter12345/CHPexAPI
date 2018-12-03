@@ -5,7 +5,6 @@ import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.CBoolean;
 import com.laytonsmith.core.constructs.CNull;
 import com.laytonsmith.core.constructs.CString;
-import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.CommandHelperEnvironment;
 import com.laytonsmith.core.environments.Environment;
@@ -13,6 +12,8 @@ import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import com.laytonsmith.core.exceptions.CRE.CRECastException;
 import com.laytonsmith.core.exceptions.CRE.CREIllegalArgumentException;
 import com.laytonsmith.core.exceptions.CRE.CRENullPointerException;
+import com.laytonsmith.core.natives.interfaces.Mixed;
+
 import io.github.pieter12345.CHPexAPI.LifeCycle.PexFunction;
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionUser;
@@ -28,7 +29,7 @@ public class CHPexFunctions {
 	public static class pex_get_uuid extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			String player = args[0].val();
 			PermissionUser permUser = getPexUser(args[0], t);
@@ -58,7 +59,7 @@ public class CHPexFunctions {
 	public static class pex_has_permission extends PexFunction {
 		
 		@Override
-		public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+		public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
 			Static.checkPlugin("PermissionsEx", t);
 			PermissionUser permUser = getPexUser(args[0], t);
 			String permission = convertStringArg(args[1], "permission", t);
@@ -85,17 +86,17 @@ public class CHPexFunctions {
 		}
 	}
 	
-	static PermissionUser getPexUser(Construct user, Target t)
+	static PermissionUser getPexUser(Mixed user, Target t)
 			throws CRENullPointerException, CRECastException, CREIllegalArgumentException {
 		return PermissionsEx.getPermissionManager().getUser(convertNonNullNonEmptyStringArg(user, "user", t));
 	}
 	
-	static PermissionGroup getPexGroup(Construct group, Target t)
+	static PermissionGroup getPexGroup(Mixed group, Target t)
 			throws CRENullPointerException, CRECastException, CREIllegalArgumentException {
 		return PermissionsEx.getPermissionManager().getGroup(convertNonNullNonEmptyStringArg(group, "group", t));
 	}
 	
-	static boolean convertBooleanArg(Construct cBoolean, String argName, Target t) throws CRECastException {
+	static boolean convertBooleanArg(Mixed cBoolean, String argName, Target t) throws CRECastException {
 		if(!(cBoolean instanceof CBoolean)) {
 			throw new CRECastException(
 					"Expecting " + argName + " to be a boolean. Found: " + cBoolean.typeof() + ".", t);
@@ -103,7 +104,7 @@ public class CHPexFunctions {
 		return ((CBoolean) cBoolean).getBoolean();
 	}
 	
-	static String convertStringArg(Construct cString, String argName, Target t) throws CRECastException {
+	static String convertStringArg(Mixed cString, String argName, Target t) throws CRECastException {
 		if(cString instanceof CNull) {
 			return null;
 		}
@@ -113,7 +114,7 @@ public class CHPexFunctions {
 		return cString.val();
 	}
 	
-	static String convertNonNullStringArg(Construct cString, String argName, Target t)
+	static String convertNonNullStringArg(Mixed cString, String argName, Target t)
 			throws CRENullPointerException, CRECastException {
 		if(cString instanceof CNull) {
 			throw new CRENullPointerException("Argument " + argName + " can not be null.", t);
@@ -124,7 +125,7 @@ public class CHPexFunctions {
 		return cString.val();
 	}
 	
-	static String convertNonNullNonEmptyStringArg(Construct cString, String argName, Target t)
+	static String convertNonNullNonEmptyStringArg(Mixed cString, String argName, Target t)
 			throws CRENullPointerException, CRECastException, CREIllegalArgumentException {
 		String str = convertNonNullStringArg(cString, argName, t);
 		if(str.isEmpty()) {
