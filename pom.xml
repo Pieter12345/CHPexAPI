@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
@@ -127,8 +127,8 @@
 		
 		<!-- CommandHelper repository -->
 		<repository>
-			<id>sk89q-maven</id>
-			<url>http://maven.sk89q.com/repo</url>
+			<id>enginehub-maven</id>
+			<url>https://maven.enginehub.org/repo</url>
 		</repository>
 		
 		<!-- PermissionsEx repository -->
